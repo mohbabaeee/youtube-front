@@ -1,4 +1,3 @@
-import React from "react";
 import { useState } from "react";
 import { CategoryPills } from "./components/CategoryPills";
 import { categories } from "./data/home";
