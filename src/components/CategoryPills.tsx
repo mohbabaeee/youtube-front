@@ -18,8 +18,8 @@ export function CategoryPills({
   const [translate, setTranslate] = useState(0);
   const [isLeftVisible, setIsLeftVisible] = useState(true);
   const [isRightVisible, setIsRightVisible] = useState(false);
-  setIsLeftVisible(false); // just for ignoring ts error
-  setIsRightVisible(false); // just for ignoring ts error
+  setIsLeftVisible(false);
+  setIsRightVisible(false);
 
   return (
     <div className="overflow-x-hidden relative">
