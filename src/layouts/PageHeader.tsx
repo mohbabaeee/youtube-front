@@ -52,9 +52,6 @@ export function PageHeader() {
         >
           <Search />
         </Button>
-        <Button size="icon" variant="ghost" className="md:hidden">
-          <Mic />
-        </Button>
         <Button size="icon" variant="ghost">
           <Upload />
         </Button>
@@ -78,7 +75,7 @@ export function PageHeaderFirstSection({
 
   return (
     <div
-      className={`gap-4 items-center flex-shrink-0 ${
+      className={`gap-2 items-center flex-shrink-0 ${
         hidden ? "hidden" : "flex"
       }`}
     >
@@ -86,7 +83,7 @@ export function PageHeaderFirstSection({
         <Menu />
       </Button>
       <a href="/">
-        <img src="/youtube.png" className="h-10" />
+        <img src="/youtube.png" className="h-7 md:h-10" />
       </a>
     </div>
   );

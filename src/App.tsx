@@ -18,7 +18,7 @@ export default function App() {
         <div className="grid grid-cols-[auto,1fr] flex-grow-1 overflow-auto">
           <SideBar />
           <div className="overflow-x-hidden px-4 pb-4">
-            <div className="sticky top-0 bg-white z-10 pb-4">
+            <div className="sticky top-0 bg-white z-10 pb-2 md:pb-4">
               <CategoryPills
                 categories={categories}
                 selectedCategory={selectedCategory}
