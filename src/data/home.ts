@@ -14,8 +14,6 @@ export const categories = [
   "Backend Web Development",
   "Web Development",
   "Coding",
-  "yeSs",
-  "gh-page is working!",
 ];
 
 export const videos = [

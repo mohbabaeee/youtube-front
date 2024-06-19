@@ -5,20 +5,39 @@ import {
   Repeat,
   ChevronUp,
   ChevronDown,
-  Library,
   History,
-  PlaySquare,
   Clock,
+  Flame,
+  ShoppingBag,
+  Music2,
+  Film,
+  Radio,
+  Gamepad2,
+  Newspaper,
+  Trophy,
+  Lightbulb,
+  Shirt,
+  Podcast,
+  ListVideo,
+  List,
 } from "lucide-react";
 import { Children, ElementType, ReactNode, useState } from "react";
 import { Button, buttonStyles } from "../components/Button";
 import { twMerge } from "tailwind-merge";
-import { playlists } from "../data/sidebar";
+import { playlists, subscriptions } from "../data/sidebar";
+import { useSidebarContext } from "../context/SidebarContext";
+import { PageHeaderFirstSection } from "./PageHeader";
 
 export default function SideBar() {
+  const { isLargeOpen, isSmallOpen, close } = useSidebarContext();
+
   return (
     <>
-      <aside className="sticky top-0 overflow-y-auto scrollbar-hidden p-4 flex flex-col ml-1 lg:hidden">
+      <aside
+        className={`sticky top-0 overflow-y-auto scrollbar-hidden flex flex-col ml-1 ${
+          isLargeOpen ? "lg:hidden" : "lg:flex"
+        }`}
+      >
         <SmallSidebarItem Icon={Home} title="Home" url="/" />
         <SmallSidebarItem Icon={Repeat} title="Shorts" url="/shorts" />
         <SmallSidebarItem
@@ -28,9 +47,23 @@ export default function SideBar() {
         />
         <SmallSidebarItem Icon={TvMinimalPlay} title="You" url="/feed/you" />
       </aside>
-      <aside className="w-56 lg:sticky absolute top-0 overflow-y-auto scrollbar-hidden flex flex-col pb-4 gap-2 px-2">
+      {isSmallOpen && (
+        <div
+          className="lg:hidden fixed inset-0 z-[999] bg-secondary-dark opacity-50"
+          onClick={close}
+        />
+      )}
+      <aside
+        className={`w-56 lg:sticky absolute top-0 overflow-y-auto scrollbar-hidden flex-col pb-4 gap-2 px-2 ${
+          isLargeOpen ? "lg:flex" : "lg:hidden"
+        } ${isSmallOpen ? "flex z-[999] bg-white max-h-screen" : "hidden"}`}
+      >
+        <div className="lg:hidden p-2 sticky top-0 bg-white">
+          <PageHeaderFirstSection />
+        </div>
         <LargeSidebarSection>
           <LargeSidebarItem isActive Icon={Home} title="Home" url="/" />
+          <LargeSidebarItem Icon={Repeat} title="Shorts" url="/shorts" />
           <LargeSidebarItem
             Icon={Clapperboard}
             title="Subscriptions"
@@ -38,27 +71,64 @@ export default function SideBar() {
           />
         </LargeSidebarSection>
         <hr />
-        <LargeSidebarSection visibleItemCount={5}>
-          <LargeSidebarItem Icon={Library} title="Library" url="/library" />
+        <LargeSidebarSection visibleItemCount={5} title="You">
           <LargeSidebarItem Icon={History} title="History" url="/history" />
           <LargeSidebarItem
-            Icon={PlaySquare}
-            title="Your Videos"
-            url="/your-videos"
+            Icon={ListVideo}
+            title="Playlists"
+            url="/feed-playlists"
           />
           <LargeSidebarItem
             Icon={Clock}
             title="Watch Later"
-            url="playlist?list=WL"
+            url="/playlist?list=WL"
           />
           {playlists.map((playlist) => (
             <LargeSidebarItem
               key={playlist.id}
               Icon={Clock}
               title={playlist.name}
-              url={`playlist?list=${playlist.id}`}
+              url={`/playlist?list=${playlist.id}`}
             />
           ))}
+        </LargeSidebarSection>
+        <hr />
+        <LargeSidebarSection title="Subscriptions" visibleItemCount={3}>
+          <LargeSidebarItem
+            Icon={List}
+            title="All subscriptions"
+            url="/feed-channels"
+          />
+          {subscriptions.map((subscription) => (
+            <LargeSidebarItem
+              key={subscription.id}
+              Icon={subscription.imgUrl}
+              title={subscription.channelName}
+              url={`/${subscription.id}`}
+            />
+          ))}
+        </LargeSidebarSection>
+        <hr />
+        <LargeSidebarSection title="Explore">
+          <LargeSidebarItem Icon={Flame} title="Trending" url="/trending" />
+          <LargeSidebarItem
+            Icon={ShoppingBag}
+            title="Shopping"
+            url="/shopping"
+          />
+          <LargeSidebarItem Icon={Music2} title="Music" url="/music" />
+          <LargeSidebarItem Icon={Film} title="Movies & TV" url="/movies-tv" />
+          <LargeSidebarItem Icon={Radio} title="Live" url="/live" />
+          <LargeSidebarItem Icon={Gamepad2} title="Gaming" url="/gaming" />
+          <LargeSidebarItem Icon={Newspaper} title="News" url="/news" />
+          <LargeSidebarItem Icon={Trophy} title="Sports" url="/sports" />
+          <LargeSidebarItem Icon={Lightbulb} title="Learning" url="/learning" />
+          <LargeSidebarItem
+            Icon={Shirt}
+            title="Fashion & Beauty"
+            url="/fashion-beauty"
+          />
+          <LargeSidebarItem Icon={Podcast} title="Podcasts" url="/podcasts" />
         </LargeSidebarSection>
       </aside>
     </>
@@ -79,8 +149,8 @@ function SmallSidebarItem({ Icon, title, url }: SmallSidebarItemProps) {
         "py-4 px-1 flex flex-col items-center rounded-lg gap-1"
       )}
     >
-      <Icon className="w-6 h-6" />
-      <div className="text-sm">{title}</div>
+      <Icon className="w-5 h-5" />
+      <div className="text-xs">{title}</div>
     </a>
   );
 }
@@ -122,7 +192,7 @@ function LargeSidebarSection({
 }
 
 type LargeSidebarItemProps = {
-  Icon: ElementType;
+  Icon: ElementType | string;
   title: string;
   url: string;
   isActive?: boolean;
@@ -138,12 +208,20 @@ function LargeSidebarItem({
       href={url}
       className={twMerge(
         buttonStyles({ variant: "ghost" }),
-        `w-full flex  items-center rounded-lg gap-4 p-3 ${
+        `w-full flex items-center rounded-lg gap-4 ${
           isActive ? "font-bold bg-neutral-100 hover:bg-secondary" : undefined
-        }`
+        } ${typeof Icon === "string" ? undefined : "p-3"}`
       )}
     >
-      <Icon className="w-6 h-6" />
+      {typeof Icon === "string" ? (
+        <img
+          src={Icon}
+          alt=""
+          className="rounded-full w-6 h-6 object-cover ml-1"
+        />
+      ) : (
+        <Icon className="w-6 h-6" />
+      )}
       <div className="whitespace-nowrap overflow-hidden text-ellipsis">
         {title}
       </div>
