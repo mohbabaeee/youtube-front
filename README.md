@@ -2,4 +2,4 @@
 
 Youtube Homepage Clone built for Learning.
 
-- Live at [here](https://tinykocholo.github.io/youtube-front)
+[![](https://img.shields.io/badge/Live_At-Vercel-green.svg)](https://youtube-front-five.vercel.app/)
