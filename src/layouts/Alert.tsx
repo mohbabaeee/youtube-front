@@ -2,7 +2,7 @@ import { CircleX } from "lucide-react";
 import { useState } from "react";
 
 export default function Alert() {
-  const [isClosed, setIsClosed] = useState(true);
+  const [isClosed, setIsClosed] = useState(false);
 
   return (
     <div
